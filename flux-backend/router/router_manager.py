@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from module_admin.controller.brand_manage_controller import brandManageController
 from module_admin.controller.cache_controller import cacheController
 from module_admin.controller.captcha_controller import captchaController
 from module_admin.controller.car_driver_controller import carDriverController
@@ -8,9 +9,10 @@ from module_admin.controller.config_controller import configController
 from module_admin.controller.dept_controller import deptController
 from module_admin.controller.dict_controller import dictController
 from module_admin.controller.import_controller import importController
+from module_admin.controller.job_controller import jobController
 from module_admin.controller.log_controller import logController
 from module_admin.controller.login_controller import loginController
-from module_admin.controller.job_controller import jobController
+from module_admin.controller.mac_pool_controller import macPoolController
 from module_admin.controller.menu_controller import menuController
 from module_admin.controller.notice_controller import noticeController
 from module_admin.controller.online_controller import onlineController
@@ -48,11 +50,11 @@ admin_controllers = [
     {'router': sysFormController, 'tags': ['系统工具-表单构建']},
     {'router': sysFormDataController, 'tags': ['系统工具-表单构建']},
     {'router': homeRouter, 'tags': ['产品官网']},
-    {'router': carDriverController, 'tags': ['测试业务']},
-    {'router': studentInfoController, 'tags': ['测试业务']},
-    {'router': importController, 'tags': ['导入数据']}
-
-
+    {'router': carDriverController, 'tags': ['司机信息']},
+    {'router': studentInfoController, 'tags': ['学生信息']},
+    {'router': macPoolController, 'tags': ['物理地址池']},
+    {'router': brandManageController, 'tags': ['电子名牌管理']},
+    {'router': importController, 'tags': ['导入数据']},
 
 ]
 
@@ -60,16 +62,18 @@ app_controllers = [
     {'router': appLoginController, 'prefix': '/wechat', 'tags': ['登录模块']},
 ]
 
+
 def get_admin_router():
     admin_router = APIRouter(prefix="")
     for controller in admin_controllers:
         admin_router.include_router(router=controller.get('router'), tags=controller.get('tags'))
     return admin_router
 
+
 def get_app_router():
     app_router = APIRouter(prefix="/api/v1")
     for controller in app_controllers:
-        app_router.include_router(router=controller.get('router'), prefix=controller.get('prefix') ,
+        app_router.include_router(router=controller.get('router'), prefix=controller.get('prefix'),
                                   tags=controller.get('tags'))
     return app_router
 
@@ -79,4 +83,3 @@ def register_router():
     all_router.include_router(router=get_admin_router())
     all_router.include_router(router=get_app_router())
     return all_router
-

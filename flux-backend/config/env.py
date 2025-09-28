@@ -1,10 +1,11 @@
 import argparse
 import os
 import sys
-from dotenv import load_dotenv
 from functools import lru_cache
-from pydantic_settings import BaseSettings
 from typing import Literal
+
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
 
 
 class AppSettings(BaseSettings):
@@ -65,6 +66,7 @@ class RedisSettings(BaseSettings):
     redis_password: str = ''
     redis_database: int = 2
 
+
 class ALIOssSettings(BaseSettings):
     ALI_OSS_KEY: str = 'xxxx'
     ALI_OSS_SECRET: str = 'xxxx'
@@ -72,6 +74,7 @@ class ALIOssSettings(BaseSettings):
     ALI_OSS_PRE: str = 'xxxx'
     ALI_OSS_BUCKET: str = 'xxxx'
     UPLOAD_METHOD: str = 'xxxx'
+
 
 class UploadSettings:
     """
@@ -125,6 +128,24 @@ class CachePathConfig:
 
     PATH = os.path.join(os.path.abspath(os.getcwd()), 'caches')
     PATHSTR = 'caches'
+
+
+class EncryptConfig:
+    """
+    加密配置
+    """
+    ENCRYPTION_KEY = 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY='
+    ENCRYPTION_IV = 'MDEyMzQ1Njc4OWFiY2RlZg=='
+
+
+class EmailConfig:
+    """
+    加密配置
+    """
+    EMAIL_SENDER = '1242528667@qq.com'
+    EMAIL_PASSWORD = 'tsilafradhfpjdac'
+    SMTP_SERVER = 'smtp.qq.com'
+    SMTP_PORT = '465'
 
 
 class GetConfig:
@@ -182,6 +203,22 @@ class GetConfig:
         """
         return ALIOssSettings()
 
+    @lru_cache()
+    def get_encrypt_config(self):
+        """
+        获取加密配置
+        """
+        # 实例化加密配置
+        return EncryptConfig()
+
+    @lru_cache()
+    def get_email_config(self):
+        """
+        获取加密配置
+        """
+        # 实例化加密配置
+        return EmailConfig()
+
     @staticmethod
     def parse_cli_args():
         """
@@ -224,3 +261,7 @@ RedisConfig = get_config.get_redis_config()
 UploadConfig = get_config.get_upload_config()
 # OSS配置
 OSSConfig = get_config.get_oss_config()
+# 加密配置
+EncryptConfig = get_config.get_encrypt_config()
+# 邮件配置
+EmailConfig = get_config.get_email_config()

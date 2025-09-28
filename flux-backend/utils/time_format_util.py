@@ -1,4 +1,5 @@
 import datetime
+import re
 
 
 def object_format_datetime(obj):
@@ -50,3 +51,8 @@ def format_datetime_dict_list(dicts):
         result.append(new_item)
 
     return result
+
+
+def is_valid_date(date_str, date_format):
+    pattern = r'^' + date_format.replace('%Y', r'\d{4}').replace('%m', r'\d{2}').replace('%d', r'\d{2}') + r'$'
+    return bool(re.match(pattern, date_str))
